@@ -4,14 +4,38 @@
 #include "llvm/Passes/PassPlugin.h"
 #include <llvm/ADT/StringRef.h>
 #include <llvm/Config/llvm-config.h>
+#include <llvm/IR/BasicBlock.h>
 #include <llvm/IR/Function.h>
+#include <llvm/IR/Instruction.h>
+#include <llvm/IR/Instructions.h>
 #include <llvm/Support/Compiler.h>
+#include <llvm/Support/raw_ostream.h>
+#include <unordered_set>
 
 using namespace llvm;
 
+static const std::unordered_set<std::string> unsafe = {
+    "gets", "strcpy", "strcat", "sprintf", "scanf",
+    "vsprintf", "realpath", "getwd", "mktemp"
+};
+
+
 struct FunctionNamePass:PassInfoMixin<FunctionNamePass>{
     PreservedAnalyses run(Function&f,FunctionAnalysisManager &){
-        errs()<<"[Functional name] Found: "<<f.getName()<<"\n";
+        errs()<<"Function "<<f.getName()<<"\n";
+        for(BasicBlock &bb:f){
+            for(Instruction &i:bb){
+                CallInst* call=dyn_cast<CallInst>(&i);
+                if(call){
+                    Function *f1=call->getCalledFunction();
+                    if(f1){
+                       // if(unsafe.count(f1->getName().str())){
+                            errs()<<"Found unsafe function "<<f1->getName().str()<<" inside "<<f.getName().str()<<"\n";
+                        //}
+                    }
+                }
+            }
+        }
         return PreservedAnalyses::all();
     }
 };

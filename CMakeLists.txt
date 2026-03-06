@@ -13,12 +13,12 @@ add_definitions(${LLVM_DEFINITIONS})
 include_directories(${LLVM_INCLUDE_DIRS})
 
 
-add_library(FunctionNamesPass MODULE pass.cpp)
+add_library(pass MODULE pass.cpp)
 
 
-target_link_libraries(FunctionNamesPass LLVM)
+target_link_libraries(pass LLVM)
 
-set_target_properties(FunctionNamesPass PROPERTIES
+set_target_properties(pass PROPERTIES
     CXX_STANDARD 17
     PREFIX ""        
 )
