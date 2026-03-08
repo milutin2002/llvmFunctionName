@@ -29,9 +29,7 @@ struct FunctionNamePass:PassInfoMixin<FunctionNamePass>{
                 if(call){
                     Function *f1=call->getCalledFunction();
                     if(f1){
-                       // if(unsafe.count(f1->getName().str())){
-                            errs()<<"Found unsafe function "<<f1->getName().str()<<" inside "<<f.getName().str()<<"\n";
-                        //}
+                            errs()<<"Found function "<<f1->getName().str()<<" inside "<<f.getName().str()<<"\n";
                     }
                 }
             }
