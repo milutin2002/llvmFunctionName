@@ -12,12 +12,15 @@ include(AddLLVM)
 add_definitions(${LLVM_DEFINITIONS})
 include_directories(${LLVM_INCLUDE_DIRS})
 
+#you add pass here and create module
 
 add_library(pass MODULE pass.cpp)
 
+#here you linke library
 
 target_link_libraries(pass LLVM)
 
+#setting up properties
 set_target_properties(pass PROPERTIES
     CXX_STANDARD 17
     PREFIX ""        
